@@ -8,17 +8,13 @@ import os
 
 config = context.config
 
-# --- ИСПРАВЛЕНИЕ НАЧАЛО ---
-# Берем URL из Railway (переменная DATABASE_URL), а если её нет — из твоих настроек
 db_url = os.getenv("DATABASE_URL")
 if db_url:
-    # Railway иногда отдает postgres://, а SQLAlchemy 2.x требует postgresql://
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
     config.set_main_option("sqlalchemy.url", db_url)
 else:
     config.set_main_option("sqlalchemy.url", settings.database_url)
-# --- ИСПРАВЛЕНИЕ КОНЕЦ ---
 
 if config.config_file_name: 
     fileConfig(config.config_file_name)
